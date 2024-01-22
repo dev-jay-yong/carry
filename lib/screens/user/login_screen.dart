@@ -1,8 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:carry/model/user/kakao_login_model.dart';
+import 'package:carry/services/user/kakao_login_services.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 import '../../entity/user/login_platform.dart';
@@ -16,29 +14,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   LoginPlatform _loginPlatform = LoginPlatform.none;
+  late Future<KakaoProfileModel> kakaoProfile;
 
   void signInWithKakao() async {
     try {
-      bool isInstalled = await isKakaoTalkInstalled();
-
-      OAuthToken token = isInstalled
-          ? await UserApi.instance.loginWithKakaoTalk()
-          : await UserApi.instance.loginWithKakaoAccount();
-
-      final url = Uri.https('kapi.kakao.com', '/v2/user/me');
-
-      final response = await http.get(
-        url,
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer ${token.accessToken}'
-        },
-      );
-
-      final profileInfo = json.decode(response.body);
-      print(profileInfo["connected_at"]);
-      print(profileInfo["connected_at"].runtimeType);
-      print(profileInfo.toString());
-
+      kakaoProfile = KakaoSocialApiService.signInWithKakao();
       setState(() {
         _loginPlatform = LoginPlatform.kakao;
       });
@@ -72,6 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "테스트",
+          )),
       body: Center(
           child: _loginPlatform != LoginPlatform.none
               ? _logoutButton()

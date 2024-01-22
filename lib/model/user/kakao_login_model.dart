@@ -1,7 +1,8 @@
-class KakaoLoginModel {
-  final String id, connected_at;
+class KakaoProfileModel {
+  final String connected_at;
+  final int id;
 
-  KakaoLoginModel.fromJson(Map<String, dynamic> json)
+  KakaoProfileModel.fromJson(Map<String, dynamic> json)
       : id = json["id"],
         connected_at = json["connected_at"];
 }
