@@ -53,53 +53,100 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "테스트",
-          )),
-      body: Center(
-          child: _loginPlatform != LoginPlatform.none
-              ? _logoutButton()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _loginButton(
-                      'kakao_logo',
-                      signInWithKakao,
-                    )
-                  ],
-                )),
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.asset(
+              "asset/image/new logo_S.png",
+              fit: BoxFit.contain,
+              height: 40,
+            ),
+            const IconButton(
+              onPressed: null,
+              icon: Icon(Icons.menu),
+            )
+          ],
+        ),
+        shape: const Border(
+          bottom: BorderSide(
+            color: Color.fromRGBO(238, 238, 238, 1),
+            width: 1,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+          ),
+          const Text(
+            "CARRY 로그인",
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _loginPlatform != LoginPlatform.none
+                    ? _logoutButton()
+                    : _loginButton(
+                        'kakao_login_large_narrow',
+                        signInWithKakao,
+                      )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _loginButton(String path, VoidCallback onTap) {
-    return Card(
-      elevation: 5.0,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: Ink.image(
-        image: AssetImage('asset/image/$path.png'),
-        width: 60,
-        height: 60,
-        child: InkWell(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(35.0),
+    return Flexible(
+      flex: 1,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 55,
+          width: 343,
+          decoration: BoxDecoration(
+            color: const Color(0xfffee500),
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          onTap: onTap,
+          child: Image.asset(
+            'asset/image/$path.png',
+            width: 60,
+            height: 60,
+          ),
         ),
       ),
     );
   }
 
   Widget _logoutButton() {
-    return ElevatedButton(
-      onPressed: signOut,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          const Color(0xff0165E1),
+    return GestureDetector(
+      onTap: signOut,
+      child: Container(
+        height: 55,
+        width: 343,
+        decoration: BoxDecoration(
+          color: const Color(0xfffee500),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          '로그아웃',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.lerp(FontWeight.w500, FontWeight.w600, 0.49),
+          ),
         ),
       ),
-      child: const Text('로그아웃'),
     );
   }
 }
